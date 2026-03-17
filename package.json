@@ -1,0 +1,224 @@
+{
+  "name": "localization-tool",
+  "displayName": "Localization Tool",
+  "description": "将硬编码文本转换为本地化代码",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/localization-tool"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+"activationEvents": [
+    "onCommand:localizationTool.convertText",
+    "onCommand:localizationTool.addLangRequire"
+],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "localizationTool.convertText",
+        "title": "转换为本地化代码",
+        "category": "Localization"
+      },
+      {
+        "command": "localizationTool.addEntry",
+        "title": "添加本地化条目",
+        "icon": "$(add)"
+      },
+      {
+        "command": "localizationTool.editEntry",
+        "title": "编辑",
+        "icon": "$(edit)"
+      },
+
+      {
+        "command": "localizationTool.refreshView",
+        "title": "刷新",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "localizationTool.clearEntries",
+        "title": "清空所有条目",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "localizationTool.setNextId",
+        "title": "设置当前ID",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "localizationTool.editConfig",
+        "title": "编辑配置"
+      },
+      {
+        "command": "localizationTool.addLangRequire",
+        "title": "添加本地化引用",
+        "category": "Localization"
+      },
+      {
+        "command": "localizationTool.gotoEntryLocation",
+        "title": "跳转到代码位置"
+      },
+      {
+        "command": "localizationTool.deleteEntry",
+        "title": "删除",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "localizationTool.copyAllEntries",
+        "title": "复制所有条目",
+        "icon": "$(copy)"
+      },
+      {
+        "command": "localizationTool.scanFile",
+        "title": "扫描当前文件并批量本地化",
+        "category": "Localization",
+        "icon": "$(search)"
+      },
+      {
+        "command": "localizationTool.scanFolder",
+        "title": "扫描文件夹并批量本地化",
+        "category": "Localization",
+        "icon": "$(folder-opened)"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "localizationTool.convertText",
+          "when": "editorHasSelection",
+          "group": "9_cutcopypaste@5"
+        },
+        {
+          "command": "localizationTool.addLangRequire",
+          "group": "9_cutcopypaste@6"
+        },
+        {
+          "command": "localizationTool.scanFile",
+          "group": "9_cutcopypaste@7"
+        },
+        {
+          "command": "localizationTool.scanFolder",
+          "group": "9_cutcopypaste@8"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "localizationTool.addEntry",
+          "when": "view == localizationEntries",
+          "group": "navigation@1"
+        },
+        {
+          "command": "localizationTool.clearEntries",
+          "when": "view == localizationEntries",
+          "group": "navigation@2"
+        },
+        {
+          "command": "localizationTool.refreshView",
+          "when": "view == localizationEntries",
+          "group": "navigation@3"
+        },
+        {
+          "command": "localizationTool.copyAllEntries",
+          "when": "view == localizationEntries",
+          "group": "navigation@4"
+        },
+        {
+          "command": "localizationTool.setNextId",
+          "when": "view == localizationConfig",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "localizationTool.editEntry",
+          "when": "view == localizationEntries && viewItem == entry",
+          "group": "inline@1"
+        },
+        {
+          "command": "localizationTool.deleteEntry",
+          "when": "view == localizationEntries && viewItem == entry",
+          "group": "inline@2"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "localizationTool",
+          "title": "本地化工具",
+          "icon": "$(globe)"
+        }
+      ]
+    },
+    "views": {
+      "localizationTool": [
+        {
+          "id": "localizationConfig",
+          "name": "配置",
+          "when": "true"
+        },
+        {
+          "id": "localizationEntries",
+          "name": "本地化条目",
+          "when": "true"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Localization Tool",
+      "properties": {
+        "localizationTool.entries": {
+          "type": "array",
+          "default": [],
+          "description": "本地化条目列表",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "text": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "filePath": {
+                "type": "string"
+              },
+              "line": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "localizationTool.nextId": {
+          "type": "number",
+          "default": 1001,
+          "description": "下一个可用的本地化ID"
+        },
+        "localizationTool.functionName": {
+          "type": "string",
+          "default": "Lang:GetLang",
+          "description": "本地化函数名称"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  }
+}
