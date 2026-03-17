@@ -1,0 +1,1 @@
+# Localization-Tool-For-VSCode
